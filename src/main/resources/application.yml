@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: batch
+  datasource:
+    password: reckon12
+    url: jdbc:mysql://localhost:3306/finance_db
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
