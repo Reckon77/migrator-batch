@@ -27,6 +27,9 @@ public class TransactionEntity {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private AccountEntity account;
+    public TransactionEntity(){
+
+    }
 
     public Long getId() {
         return id;
