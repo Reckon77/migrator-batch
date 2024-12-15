@@ -8,10 +8,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Builder
 @Entity
+@AllArgsConstructor
 @Table(name = "users")
 public class UserEntity {
 
@@ -27,7 +29,11 @@ public class UserEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<AccountEntity> accounts;
+    private Set<AccountEntity> accounts;
+    public UserEntity() {
+    }
+    public UserEntity(long id, String janeSmith, String mail) {
+    }
 
     public Long getId() {
         return id;
@@ -61,11 +67,11 @@ public class UserEntity {
         this.phone = phone;
     }
 
-    public List<AccountEntity> getAccounts() {
+    public Set<AccountEntity> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<AccountEntity> accounts) {
+    public void setAccounts(Set<AccountEntity> accounts) {
         this.accounts = accounts;
     }
 }

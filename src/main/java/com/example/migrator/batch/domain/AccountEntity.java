@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Entity
@@ -28,7 +29,11 @@ public class AccountEntity {
     private UserEntity user;
     @JsonIgnore
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TransactionEntity> transactions;
+    private Set<TransactionEntity> transactions;
+
+    public AccountEntity(){
+
+    }
 
     public Long getId() {
         return id;
@@ -54,11 +59,11 @@ public class AccountEntity {
         this.balance = balance;
     }
 
-    public List<TransactionEntity> getTransactions() {
+    public Set<TransactionEntity> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<TransactionEntity> transactions) {
+    public void setTransactions(Set<TransactionEntity> transactions) {
         this.transactions = transactions;
     }
 
