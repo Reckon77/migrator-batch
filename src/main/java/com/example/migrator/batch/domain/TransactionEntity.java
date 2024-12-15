@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Entity
 @Table(name = "transactions")
 public class TransactionEntity {

@@ -3,7 +3,7 @@ spring:
     name: batch
   batch:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
   datasource:
     password: reckon12
     url: jdbc:mysql://localhost:3306/finance_db
@@ -21,6 +21,9 @@ spring:
       host: localhost
       port: 27017
       database: finance_db
+  sql:
+    init:
+      mode: never #change to always to run schema.sql
 #logging:
 #  level:
 #    org.springframework.jdbc.core: DEBUG

@@ -14,11 +14,10 @@ public class UserProcessor implements ItemProcessor<UserEntity, UserDocument> {
     @Override
     public UserDocument process(UserEntity userEntity) throws Exception {
         UserDocument userDoc = new UserDocument();
+        userDoc.setId(String.valueOf(userEntity.getId()));
         userDoc.setName(userEntity.getName());
         userDoc.setEmail(userEntity.getEmail());
         userDoc.setPhone(userEntity.getPhone());
-        System.out.println("Processor.............................................");
-
         userDoc.setAccounts(userEntity.getAccounts().stream().map(account -> {
             AccountDocument accDoc = new AccountDocument();
             accDoc.setAccountType(account.getAccountType());

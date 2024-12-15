@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Set;
 
-@Builder
 @Entity
 @Table(name = "accounts")
 public class AccountEntity {
