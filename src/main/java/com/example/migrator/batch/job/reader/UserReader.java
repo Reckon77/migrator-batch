@@ -20,13 +20,19 @@ public class UserReader {
     @Bean
     public JpaPagingItemReader<UserEntity> userItemReader() {
         System.out.println("Initializing JpaPagingItemReader...");
-        return new JpaPagingItemReaderBuilder<UserEntity>()
+        JpaPagingItemReader<UserEntity> jpaPagingItemReader = new JpaPagingItemReaderBuilder<UserEntity>()
                 .name("userItemReader")
                 .entityManagerFactory(entityManagerFactory)
                 .queryString("SELECT u FROM UserEntity u LEFT JOIN FETCH u.accounts a LEFT JOIN FETCH a.transactions")
-                .pageSize(10) // Chunk size
+                .pageSize(10) // Chunk size; adjust based on performance needs
                 .build();
+
+        jpaPagingItemReader.setSaveState(false); // Disable state tracking for multi-threading
+        return jpaPagingItemReader;
     }
+
+
+
 }
 
 

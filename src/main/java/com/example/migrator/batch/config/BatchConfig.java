@@ -18,9 +18,13 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.data.MongoItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.repeat.RepeatOperations;
+import org.springframework.batch.repeat.support.TaskExecutorRepeatTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -55,6 +59,7 @@ public class BatchConfig {
                 .listener(new ReaderListener())
                 .listener(new ProcessorListener())
                 .listener(new WriterListener())
+                .taskExecutor(taskExecutor())
                 .build();
     }
 
@@ -65,5 +70,16 @@ public class BatchConfig {
                 .listener(listener)
                 .start(step)
                 .build();
+    }
+
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(3);
+        executor.setMaxPoolSize(5);
+        executor.setQueueCapacity(10);
+        executor.setThreadNamePrefix("Batch-Thread-");
+        executor.initialize();
+        return executor;
     }
 }
