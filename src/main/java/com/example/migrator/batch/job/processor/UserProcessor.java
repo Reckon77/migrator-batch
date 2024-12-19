@@ -8,15 +8,22 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
 public class UserProcessor implements ItemProcessor<UserEntity, UserDocument> {
+    private final Map<Long, UserDocument> entityDocumentMap;
+
+    public UserProcessor(Map<Long, UserDocument> entityDocumentMap) {
+        this.entityDocumentMap = entityDocumentMap;
+    }
 
     @Override
     public UserDocument process(UserEntity userEntity) {
         // Local variables ensure no shared mutable state
         UserDocument userDoc = createUserDocument(userEntity);
+        entityDocumentMap.put(userEntity.getId(), userDoc);
         return userDoc;
     }
 

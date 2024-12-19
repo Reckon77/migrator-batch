@@ -9,6 +9,7 @@ import com.example.migrator.batch.listener.JobCompletionNotificationListener;
 import com.example.migrator.batch.listener.ProcessorListener;
 import com.example.migrator.batch.listener.ReaderListener;
 import com.example.migrator.batch.listener.WriterListener;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -16,6 +17,7 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.Chunk;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.data.MongoItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.repeat.RepeatOperations;
@@ -27,16 +29,21 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 @EnableBatchProcessing
 public class BatchConfig {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
+    private final EntityManagerFactory entityManagerFactory;
 
-    public BatchConfig(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public BatchConfig(JobRepository jobRepository, PlatformTransactionManager transactionManager,EntityManagerFactory entityManagerFactory) {
         this.jobRepository = jobRepository;
         this.transactionManager = transactionManager;
+        this.entityManagerFactory = entityManagerFactory;
     }
     @Bean
     @Qualifier("step")
@@ -58,7 +65,7 @@ public class BatchConfig {
                 .retryLimit(3)
                 .listener(new ReaderListener())
                 .listener(new ProcessorListener())
-                .listener(new WriterListener())
+                .listener(new WriterListener(entityManagerFactory,entityDocumentMap()))
                 .taskExecutor(taskExecutor())
                 .build();
     }
@@ -81,5 +88,9 @@ public class BatchConfig {
         executor.setThreadNamePrefix("Batch-Thread-");
         executor.initialize();
         return executor;
+    }
+    @Bean
+    public Map<Long, UserDocument> entityDocumentMap() {
+        return new HashMap<>();
     }
 }
