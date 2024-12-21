@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password  # Set the root password for MySQL
+      MYSQL_DATABASE: finance_db  # Create the initial database
+    ports:
+      - "3307:3306"  # Maps MySQL port 3306 inside container to 3307 on the host
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_DATABASE: finance_db  # No password needed for MongoDB
+    ports:
+      - "27018:27017"  # Maps MongoDB port 27017 inside container to 27018 on the host
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: migrator-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/finance_db  # Refers to MySQL container
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATA_MONGODB_HOST: mongo-db
+      SPRING_DATA_MONGODB_PORT: 27017  # Uses MongoDB container port
+      SPRING_DATA_MONGODB_DATABASE: finance_db
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - mongodb
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+  mongo_data:
+
+networks:
+  app-network:
+    driver: bridge
