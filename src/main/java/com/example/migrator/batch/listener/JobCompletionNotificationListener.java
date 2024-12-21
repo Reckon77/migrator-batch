@@ -3,8 +3,6 @@ package com.example.migrator.batch.listener;
 import com.example.migrator.batch.domain.MigrationMetadata;
 import com.example.migrator.batch.repository.MigrationMetadataRepository;
 import jakarta.persistence.EntityManager;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
