@@ -1,29 +1,30 @@
 spring:
   application:
-    name: batch
+    name: batch # Specifies the name of the application (useful for logging and identification in distributed systems)
   batch:
     jdbc:
-      initialize-schema: never
-  datasource:
-    password: reckon12
-    url: jdbc:mysql://localhost:3306/finance_db
-    username: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
+      initialize-schema: never # Prevents Spring Batch from automatically creating or initializing its schema
+  datasource: # Configuration for the MySQL database
+    password: password # Password for the database user
+    url: jdbc:mysql://localhost:3306/finance_db # JDBC URL for connecting to the MySQL database
+    username: root # Username for the database
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL JDBC driver class name
+  jpa: # Configuration for Spring Data JPA
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update # Automatically updates the database schema based on JPA entities (use cautiously in production)
+    show-sql: true # Enables logging of SQL statements executed by Hibernate
+    defer-datasource-initialization: true
     properties:
       hibernate:
-        format_sql: true
+        format_sql: true # Formats SQL statements for easier readability in logs
   data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: finance_db
+    mongodb: # Configuration for MongoDB
+      host: localhost # Hostname where MongoDB is running
+      port: 27017 # Port number for MongoDB
+      database: finance_db # Name of the MongoDB database to connect to
   sql:
     init:
-      mode: never #change to always to run schema.sql
+      mode: never # Controls whether SQL scripts (schema.sql, data.sql) should be executed at startup. Change to 'always' to enable.
 #logging:
 #  level:
-#    org.springframework.jdbc.core: DEBUG
+#    org.springframework.jdbc.core: DEBUG # Uncomment to enable detailed JDBC logging (useful for debugging database interactions)

@@ -96,3 +96,4 @@ CREATE TABLE BATCH_JOB_SEQ (
 ) ENGINE=InnoDB;
 
 INSERT INTO BATCH_JOB_SEQ (ID, UNIQUE_KEY) select * from (select 0 as ID, '0' as UNIQUE_KEY) as tmp where not exists(select * from BATCH_JOB_SEQ);
+

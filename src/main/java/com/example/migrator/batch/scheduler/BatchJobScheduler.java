@@ -20,7 +20,7 @@ public class BatchJobScheduler {
     }
 
     //@Scheduled(cron = "0 0 * * * ?") // Run every hour
-    @Scheduled(cron = "0 */2 * * * ?") // Run every 2 minutes
+    @Scheduled(cron = "0 */10 * * * ?") // Run every 10 minutes
     public void scheduleJob() {
         try {
             JobParameters jobParameters = new JobParametersBuilder()
