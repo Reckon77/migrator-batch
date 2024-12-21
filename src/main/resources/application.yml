@@ -13,6 +13,7 @@ spring:
     hibernate:
       ddl-auto: update # Automatically updates the database schema based on JPA entities (use cautiously in production)
     show-sql: true # Enables logging of SQL statements executed by Hibernate
+    defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true # Formats SQL statements for easier readability in logs
