@@ -97,7 +97,7 @@ src/
 6. **Manual Invocation**:
    - Users can manually trigger the migration job via the REST endpoint:
      ```
-     POST /startJob
+     GET /startJob
      ```
 
 ---
