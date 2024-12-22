@@ -1,30 +1,29 @@
 spring:
   application:
-    name: batch # Specifies the name of the application (useful for logging and identification in distributed systems)
+    name: batch # Specifies the name of the application
   batch:
     jdbc:
-      initialize-schema: never # Prevents Spring Batch from automatically creating or initializing its schema
-  datasource: # Configuration for the MySQL database
-    password: password # Password for the database user
-    url: jdbc:mysql://localhost:3306/finance_db # JDBC URL for connecting to the MySQL database
-    username: root # Username for the database
-    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL JDBC driver class name
-  jpa: # Configuration for Spring Data JPA
+      initialize-schema: never # Prevent Spring Batch from automatically initializing its schema
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/finance_db}  # Fallback if not set
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}  # Default password if not set
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
     hibernate:
-      ddl-auto: update # Automatically updates the database schema based on JPA entities (use cautiously in production)
-    show-sql: true # Enables logging of SQL statements executed by Hibernate
-    defer-datasource-initialization: true
+      ddl-auto: update  # Automatically updates database schema based on JPA entities
+    show-sql: true  # Logs SQL statements executed by Hibernate
+    defer-datasource-initialization: true  # Ensure schema.sql runs after Hibernate tables
     properties:
       hibernate:
-        format_sql: true # Formats SQL statements for easier readability in logs
+        format_sql: true  # Formats SQL logs for readability
+    database-platform: org.hibernate.dialect.MySQLDialect
   data:
-    mongodb: # Configuration for MongoDB
-      host: localhost # Hostname where MongoDB is running
-      port: 27017 # Port number for MongoDB
-      database: finance_db # Name of the MongoDB database to connect to
+    mongodb:
+      host: ${SPRING_DATA_MONGODB_HOST:localhost}
+      port: ${SPRING_DATA_MONGODB_PORT:27017}
+      database: ${SPRING_DATA_MONGODB_DATABASE:finance_db}
   sql:
     init:
-      mode: never # Controls whether SQL scripts (schema.sql, data.sql) should be executed at startup. Change to 'always' to enable.
-#logging:
-#  level:
-#    org.springframework.jdbc.core: DEBUG # Uncomment to enable detailed JDBC logging (useful for debugging database interactions)
+      mode: always  # Always run schema.sql and data.sql on startup
+      continue-on-error: true
